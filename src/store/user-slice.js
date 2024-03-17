@@ -1,6 +1,4 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { toast } from "react-toastify";
-
 
 
 // export const getUser = createAsyncThunk("user/getUser", async (id) => {
@@ -21,11 +19,12 @@ const userSlice = createSlice({
     reducers: {
         login: (state, action) => {
             state.token = action.payload;
-            // localStorage.setItem('token', action.payload);
+            localStorage.setItem('token', action.payload);
+            return;
         },
         logout: (state) => {
             state.token = null;
-            // localStorage.removeItem('token');
+            localStorage.removeItem('token');
         }
     },
 });

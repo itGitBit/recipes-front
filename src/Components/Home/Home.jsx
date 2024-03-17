@@ -1,17 +1,27 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
-import { Navigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import { addHistory } from '../../store/history-slice';
 
 
 const Home = () => {
-    const token = useSelector(state => state.token);
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
+
+    const handleExploreButton = () => {
+        const navigateTo = '/recipes';
+        dispatch(addHistory(navigateTo));
+        navigate(navigateTo);
+    }
 
     return (
-        token ?
-            <div>
-                <h1>Home</h1>
-            </div> :
-            <Navigate to="/login" />
+        <div>
+            <h1>Home</h1>
+            <p>Welcome to the home page</p>
+            <p>Click the button below to explore all recipes</p>
+            <button onClick={handleExploreButton}>Explore All Recipes</button>
+
+        </div>
     );
 }
 export default Home;

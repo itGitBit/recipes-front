@@ -1,7 +1,6 @@
 import './App.css';
 // import IngredientsSearch from './Components/Ingredients/IngredientsSearch';
 import RecipeList from './Components/Recipe/RecipeList/RecipeList';
-import { useState } from "react";
 import { Route, Routes } from 'react-router-dom';
 import { ToastContainer } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
@@ -9,15 +8,12 @@ import Home from './Components/Home/Home';
 import NotFound from './Components/NotFound/NotFound';
 import MainHeader from './Components/MainHeader/MainHeader';
 import LoginPage from './Components/LoginPage/LoginPage';
-import IngredientsSearch from './Components/Ingredients/IngredientsSearch';
+import IngredientsSearch from './Components/Ingredients/IngredintsSearch/IngredientsSearch';
 
 
 
 
 function App() {
-  const [get, setGet] = useState(false);
-
-
 
   return (
     <div className="App">

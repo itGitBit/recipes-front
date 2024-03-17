@@ -1,19 +1,21 @@
 import { useRef } from "react";
 import { useDispatch } from "react-redux";
 import { Navigate, useNavigate } from "react-router-dom";
-import { login } from "../../utils/apiCalls";
+import { login } from "../../store/user-slice";
 import { useSelector } from "react-redux";
-import errorHandler from "../errors/error-handler";
+
 
 
 const LoginPage = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
+
     const emailRef = useRef('');
     const passwordRef = useRef('');
 
-    const token = useSelector(state => state.token);
+    const token = useSelector(state => state.user.token);
+    const fromNavigated = useSelector(state => state.history.from);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -21,9 +23,8 @@ const LoginPage = () => {
         const password = passwordRef.current.value;
         const loginData = await performLogin(email, password);
         if (loginData) {
-            console.log(` login data: ${JSON.stringify(loginData)}`);
-            dispatch(login(loginData.refreshToken));
-            navigate('/');
+            dispatch(login(loginData.accessToken));
+            navigate(fromNavigated ? fromNavigated : '/');
         }
     }
 
@@ -36,11 +37,8 @@ const LoginPage = () => {
             body: JSON.stringify({ email, password })
         });
         const data = await response.json();
-        if (response.ok) {
+        if (response.status === 200) {
             return data;
-        }
-        if (data.error) {
-            errorHandler(data.error);
         }
         return null;
     }
@@ -62,7 +60,7 @@ const LoginPage = () => {
                     </>
                 </form>
             </div> :
-            <Navigate to="/" />
+            <Navigate to={fromNavigated} />
     );
 }
 export default LoginPage;
