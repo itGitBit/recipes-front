@@ -14,18 +14,6 @@ const UserCard = ({ id }) => {
         const fetchedUser = await getData(id, "users");
         setUser(fetchedUser);
     }
-    
-    // const getUser = (id) => {
-    //     fetch(`http://localhost:3001/users/${id}`)
-    //         .then((response) => response.json())
-    //         .then((data) => {
-    //             setUser(data);
-    //             console.log(data)
-    //         })
-    //         .catch((error) => {
-    //             alert(error.message);
-    //         });
-    // };
 
     return (
         <div>

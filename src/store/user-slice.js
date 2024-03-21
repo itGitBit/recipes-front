@@ -18,6 +18,11 @@ const userSlice = createSlice({
     },
     reducers: {
         login: (state, action) => {
+            const loggedIn = localStorage.getItem('token');
+            if (loggedIn) {
+                state.token = loggedIn;
+                return;
+            }
             state.token = action.payload;
             localStorage.setItem('token', action.payload);
             return;
@@ -25,9 +30,12 @@ const userSlice = createSlice({
         logout: (state) => {
             state.token = null;
             localStorage.removeItem('token');
+        },
+        setToken: (state, action) => {
+            state.token = action.payload;
         }
     },
 });
-export const { login, logout } = userSlice.actions;
+export const { login, logout, setToken } = userSlice.actions;
 
 export default userSlice.reducer;

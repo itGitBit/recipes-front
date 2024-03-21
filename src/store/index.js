@@ -3,6 +3,7 @@ import userReducer from "./user-slice";
 import historyReducer from "./history-slice";
 import ingredientsSearchReducer from "./ingredient-search-slice";
 import recipesListReducer from "./recipes-slice";
+import likesReducer from "./likes-slice";
 
 
 const store = configureStore({
@@ -10,7 +11,8 @@ const store = configureStore({
         user: userReducer,
         history: historyReducer,
         ingredientsSearch: ingredientsSearchReducer,
-        recipesList: recipesListReducer
+        recipes: recipesListReducer,
+        likes: likesReducer
     }
 });
 

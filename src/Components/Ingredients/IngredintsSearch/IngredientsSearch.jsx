@@ -27,6 +27,10 @@ const IngredientsSearch = () => {
 
 
     const searchForRecipe = async () => {
+        if (filteredIngredientsList.length < 3) {
+            errorHandler("You must select at least 3 ingredients");
+            return;
+        }
         try {
             const response = await fetch('http://localhost:3001/recipes/getbyingredients', {
                 method: 'POST',
@@ -39,9 +43,8 @@ const IngredientsSearch = () => {
             if (!response.ok) {
                 throw new Error(`HTTP error! Status: ${response.status}`);
             }
-
-            const recipes = await response.json();
-            dispatch(setRecipes(recipes));
+            const recipesData = await response.json();
+            dispatch(setRecipes(recipesData));
             navigate('/recipes');
 
         } catch (error) {

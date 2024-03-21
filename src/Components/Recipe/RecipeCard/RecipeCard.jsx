@@ -3,25 +3,50 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faThumbsUp } from '@fortawesome/free-solid-svg-icons';
 import './RecipeCard.css';
 import UserCard from '../../User/UserCard/UserCard';
+import { useDispatch, useSelector } from 'react-redux';
+import { setRecipes } from '../../../store/recipes-slice';
+import { jwtDecode } from 'jwt-decode';
+
 
 const RecipeCard = ({ id, title, description, image, steps, ingredients, tags, userId }) => {
     const [likesAmount, setLikesAmount] = useState(0);
     const [showMore, setShowMore] = useState(false);
+    const likes = useSelector(state => state.likes.likes);
+    const dispatch = useDispatch();
+    const token = useSelector(state => state.user.token);
+    const [isLiked, setIsLiked] = useState(false);
+
+    const checkIfLiked = useCallback(() => {
+        if (likes.length === 0) {
+            setIsLiked(false);
+            return;
+        }
+        const liked = likes.some(like => like.recipeId === id);
+        liked ? setIsLiked(true) : setIsLiked(false);
+    }, [likes]);
+
+    
+
+    const loadRecipesByTag = async (tagName) => {
+        const response = await fetch(`http://localhost:3001/recipes/bytag/${tagName}`)
+        const data = await response.json();
+        dispatch(setRecipes(data));
+    }
+
 
     const getLikes = useCallback(() => {
         fetch(`http://localhost:3001/likes/byrecipe/${id}`)
             .then((response) => response.json())
             .then((data) => setLikesAmount(data.length))
             .catch((error) => { alert(error.message) })
+    
     }, [id]);
 
     const addLike = (recipeId) => {
         let like = {
-            userId: 5, // Consider dynamically setting this based on authenticated user
+            userId: jwtDecode(token).id,
             recipeId: recipeId
         };
-        console.log(JSON.stringify(like))
-
         fetch('http://localhost:3001/likes', {
             method: 'POST',
             headers: {
@@ -32,16 +57,20 @@ const RecipeCard = ({ id, title, description, image, steps, ingredients, tags, u
             .then(response => response.json())
             .then(data => {
                 setLikesAmount(prevLikes => data.message.includes("added") ? prevLikes + 1 : prevLikes - 1);
-                console.log("success: ", data);
+                setIsLiked(data.message.includes("added") ? true : false);
             })
             .catch((error) => {
                 alert(error.message);
             });
     };
 
+
+
     useEffect(() => {
         getLikes();
-    }, [getLikes]);
+        checkIfLiked();
+    }, [getLikes, checkIfLiked]);
+
 
     return (
         <div className="recipe-card">
@@ -66,14 +95,18 @@ const RecipeCard = ({ id, title, description, image, steps, ingredients, tags, u
                     <div>
                         <h4>Tags:</h4>
                         {tags.map((tag, index) => (
-                            <span key={index}> {tag.name} </span>
+
+                            <span key={index}> <button onClick={() => loadRecipesByTag(tag.name)}>{tag.name}</button> </span>
                         ))}
                     </div>
                     <div><UserCard id={userId} /></div>
                 </div>
             )}
-            <p><FontAwesomeIcon icon={faThumbsUp} /> {likesAmount}</p>
-            <div><button className='button' onClick={() => addLike(id)}>Like</button></div>
+            <div>
+          <div className="likes-count"> <FontAwesomeIcon icon={faThumbsUp} onClick={() => addLike(id)}
+            className={isLiked ? 'liked-post-thumbs' : 'not-yet-liked-post-thumbs'}
+            /></div><p className='like-counter'> {likesAmount}</p></div>
+            {/* <div><button className='button' onClick={() => addLike(id)}>Like</button></div> */}
             <button className='button' onClick={() => setShowMore(!showMore)}>{showMore ? 'Show Less' : 'Show More'}</button>
         </div>
     );

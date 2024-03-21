@@ -5,8 +5,10 @@
 .recipe-card-in-list {
     display: flex;
     flex-wrap: wrap;
-    justify-content: space-around; /* This will space out your items evenly */
-    align-items: stretch; /* This ensures that the items stretch to fill the container height */
+    justify-content: space-around;
+    /* This will space out your items evenly */
+    align-items: stretch;
+    /* This ensures that the items stretch to fill the container height */
 }
 
 
@@ -17,7 +19,8 @@
     align-items: center;
 
     margin: 10px;
-    box-sizing: border-box; /* This makes sure padding and border are included in the width */
+    box-sizing: border-box;
+    /* This makes sure padding and border are included in the width */
 }
 
 p {
@@ -72,6 +75,35 @@ p {
     /* Push the button down a bit */
 }
 
-.show-more{
+.show-more {
     transition: all 5s ease 2s;
+}
+
+.liked-post-thumbs {
+    color: rgb(0, 255, 60);
+}
+.liked-post-thumbs:hover {
+    color: rgb(2, 169, 41);
+    cursor: pointer;
+}
+
+.not-yet-liked-post-thumbs {
+    color: grey;
+    
+}
+
+.not-yet-liked-post-thumbs:hover {
+    color: black;
+    cursor: pointer;
+}
+.like-counter{
+    color: black;
+font-size:  1.2em;
+padding: 0 0.5em;
+display: inline-block;
+}
+.likes-count{
+    font-size: 2em;
+    display: inline-block;
+
 }

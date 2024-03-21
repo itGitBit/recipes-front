@@ -9,20 +9,32 @@ import NotFound from './Components/NotFound/NotFound';
 import MainHeader from './Components/MainHeader/MainHeader';
 import LoginPage from './Components/LoginPage/LoginPage';
 import IngredientsSearch from './Components/Ingredients/IngredintsSearch/IngredientsSearch';
-
-
+import { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
+import { logout, setToken } from './store/user-slice';
+import UserInfo from './Components/User/UserInfo/UserInfo';
 
 
 function App() {
+
+
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    token ? dispatch(setToken(token)) : dispatch(logout());
+  }, [dispatch]);
 
   return (
     <div className="App">
       <ToastContainer />
       <MainHeader />
+
       <Routes>
         <Route path="/recipes" element={<RecipeList />} />
         <Route path="/ingredients" element={<IngredientsSearch />} />
         <Route path="/login" element={<LoginPage />} />
+        <Route path="/user" element={<UserInfo />} />
         <Route path="/" element={<Home />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
